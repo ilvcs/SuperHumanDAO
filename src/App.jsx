@@ -1,9 +1,10 @@
 import {useEffect, useMemo, useState} from 'react';
 import { ethers } from "ethers";
-
+import { UnsupportedChainIdError } from "@web3-react/core";
 import { useWeb3 } from "@3rdweb/hooks";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import {shortenAddress} from './helpers';
+import Proposals from './components/Proposals';
 // We instantiate the sdk on Rinkeby.
 const sdk = new ThirdwebSDK("rinkeby");
 
@@ -14,6 +15,11 @@ const bundleDropModule = sdk.getBundleDropModule(
 
 const tokenModule = sdk.getTokenModule(
   "0x7Eb4Cf9fcA3722C59a0934F35384C478AE254dBa"
+);
+
+// Our voting contract.
+const voteModule = sdk.getVoteModule(
+  "0x9a5509F76d4486D257F43F4964348fe91997cCbf",
 );
 
 const App = () => {
@@ -133,6 +139,18 @@ const App = () => {
     }
   }
 
+  if (error instanceof UnsupportedChainIdError ) {
+    return (
+      <div className="unsupported-network">
+        <h2>Please connect to Rinkeby</h2>
+        <p>
+          This dapp only works on the Rinkeby network, please switch networks
+          in your connected wallet.
+        </p>
+      </div>
+    );
+  }
+
 
   if(!address){
     return(
@@ -170,8 +188,10 @@ const App = () => {
                 );
               })}
             </tbody>
+            
           </table>
         </div>
+        <Proposals hasClaimedNFT={userClaimedNFT} address={address}/>
       </div>
     </div>
   );
