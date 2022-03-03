@@ -17,10 +17,6 @@ const tokenModule = sdk.getTokenModule(
   "0x7Eb4Cf9fcA3722C59a0934F35384C478AE254dBa"
 );
 
-// Our voting contract.
-const voteModule = sdk.getVoteModule(
-  "0x9a5509F76d4486D257F43F4964348fe91997cCbf",
-);
 
 const App = () => {
 
